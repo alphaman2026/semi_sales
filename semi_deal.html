@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SEMI DEAL — 반도체 B2B 영업 타이쿤</title>
+<style>
+:root{--bg:#070b16;--panel:#0f1729;--panel2:#162038;--line:#24314f;--cyan:#3ee6ff;--mag:#ff4fd8;--yel:#ffd54a;--grn:#4ae08a;--red:#ff5c6c;--txt:#e8eefc;--dim:#8a97b8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 50% -200px,#15254a 0%,var(--bg) 60%);color:var(--txt);font-family:-apple-system,"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;display:flex;justify-content:center;min-height:100%;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 3px);z-index:9}
+#app{width:100%;max-width:480px;padding:14px 12px 40px}
+.screen{display:none;animation:fade .3s}.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:32px;letter-spacing:2px;text-align:center;background:linear-gradient(90deg,var(--grn),var(--cyan));-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(74,224,138,.4))}
+.sub{color:var(--dim);text-align:center;font-size:13px;margin-top:6px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:1px;background:rgba(74,224,138,.12);color:var(--grn);border:1px solid rgba(74,224,138,.4)}
+.badge.y{background:rgba(255,213,74,.12);color:var(--yel);border-color:rgba(255,213,74,.4)}
+.badge.m{background:rgba(255,79,216,.12);color:var(--mag);border-color:rgba(255,79,216,.4)}
+h2{font-size:20px;margin:8px 0 4px}h3{font-size:15px;margin-bottom:8px;color:var(--yel)}
+p{line-height:1.6;font-size:14px}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;font-weight:700;font-size:16px;padding:13px;width:100%;color:#061018;background:linear-gradient(135deg,var(--grn),var(--cyan));box-shadow:0 5px 0 #1c6a4a;transition:transform .08s;margin-top:10px}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #1c6a4a}
+button.ghost{background:var(--panel2);color:var(--txt);box-shadow:0 4px 0 #0b1224;font-size:14px;padding:10px}
+button.card{background:var(--panel2);color:var(--txt);box-shadow:0 4px 0 #0b1224;font-size:14px;text-align:left;padding:12px 14px;margin-top:8px;line-height:1.45}
+button.card small{display:block;color:var(--dim);font-weight:400;font-size:12px;margin-top:2px}
+button.card.ok{background:linear-gradient(135deg,#1d7a4a,#2fbf72);color:#fff}
+button.card.bad{background:linear-gradient(135deg,#7a3520,#d6603c);color:#fff}
+button.card.dis{pointer-events:none;opacity:.75}
+input[type=text]{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:#0a1022;color:var(--txt);font-size:18px;text-align:center;font-family:inherit;margin-top:12px;outline:none}
+input[type=range]{width:100%;accent-color:var(--cyan);margin:6px 0}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 4px;text-align:center}
+.kpi div span{display:block;font-size:10px;color:var(--dim)}
+.kpi div b{font-size:15px;color:var(--cyan)}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--dim);margin-bottom:4px}.top b{color:var(--yel)}
+.cust{display:flex;gap:10px;align-items:center;background:var(--panel2);border-radius:10px;padding:10px;margin-top:8px}
+.cust .ic{font-size:34px}.cust .nm{font-weight:700;font-size:15px}.cust .wt{font-size:12px;color:var(--dim);line-height:1.5}
+.trust{height:6px;background:#0a1022;border-radius:4px;overflow:hidden;margin-top:4px}.trust i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--yel),var(--grn))}
+.field{margin-top:12px;background:var(--panel2);border-radius:10px;padding:10px}
+.field .lb{display:flex;justify-content:space-between;font-size:13px}.field .lb b{color:var(--yel)}
+.field .hint{font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.5}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.opt{border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12.5px;cursor:pointer;background:#0a1022;line-height:1.4}
+.opt.sel{border-color:var(--cyan);color:var(--cyan)}
+.opt small{display:block;color:var(--dim);font-size:11px}
+.gauge{height:16px;background:#0a1022;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:6px;position:relative}
+.gauge i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--yel),var(--grn));transition:width .3s}
+.gauge b{position:absolute;inset:0;text-align:center;font-size:11px;line-height:16px;color:#fff;text-shadow:0 0 3px #000}
+.news{background:linear-gradient(135deg,#2a2440,#14203a);border:1px solid rgba(255,79,216,.4);border-radius:12px;padding:12px;margin-top:10px}
+.news .h{font-size:11px;color:var(--mag);letter-spacing:1px;font-weight:700}.news .t{font-size:15px;font-weight:700;margin-top:4px;line-height:1.45}.news .d{font-size:13px;color:var(--dim);margin-top:6px;line-height:1.55}
+.talk{background:var(--panel2);border-radius:12px 12px 12px 2px;padding:12px;margin-top:10px;font-size:14px;line-height:1.6;border-left:3px solid var(--mag)}
+.tip{background:var(--panel2);border-radius:8px;padding:10px;font-size:13px;line-height:1.55;margin-top:10px;border-left:3px solid var(--yel)}
+.tip b{color:var(--yel)}
+.big{font-size:44px;font-weight:900;text-align:center;line-height:1.1}.big.w{color:var(--grn);text-shadow:0 0 20px rgba(74,224,138,.5)}.big.l{color:var(--red)}
+.num{font-size:28px;font-weight:900;color:var(--cyan);text-align:center}
+.nick{font-size:34px;font-weight:900;text-align:center;background:linear-gradient(90deg,var(--yel),var(--mag));-webkit-background-clip:text;color:transparent;word-break:break-all}
+.grade{display:inline-block;font-size:40px;font-weight:900;padding:4px 20px;border-radius:12px;border:2px solid var(--yel);color:var(--yel)}
+.rank{list-style:none;margin-top:6px}.rank li{display:flex;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--line);font-size:14px}.rank li.me{color:var(--yel);font-weight:700}
+.boss{display:flex;gap:10px;align-items:flex-start;margin-top:10px}.boss .f{font-size:36px}.boss .b{background:var(--panel2);border-radius:2px 12px 12px 12px;padding:10px;font-size:13.5px;line-height:1.55;flex:1}
+.small{font-size:12px;color:var(--dim);text-align:center;margin-top:8px}
+.term{color:var(--cyan);border-bottom:1px dotted var(--cyan);cursor:pointer}
+#gl{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:50;display:none;align-items:flex-end;justify-content:center}
+#gl .box{background:var(--panel);border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:80vh;overflow:auto;padding:16px;border-top:1px solid var(--line)}
+#gl dl dt{color:var(--cyan);font-weight:700;margin-top:10px;font-size:14px}#gl dl dd{font-size:13px;color:var(--dim);line-height:1.55}
+.flow{display:flex;justify-content:space-between;margin-top:10px;gap:3px}
+.flow span{flex:1;text-align:center;font-size:10px;padding:5px 2px;border-radius:6px;background:var(--panel2);color:var(--dim)}
+.flow span.on{background:rgba(62,230,255,.15);color:var(--cyan);border:1px solid var(--cyan)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<section id="s-start" class="screen on">
+  <div style="text-align:center;font-size:52px;margin-top:6px">🤝</div>
+  <h1>SEMI DEAL</h1>
+  <div class="sub">반도체 B2B 영업 타이쿤 — 8분기 동안 매출·이익·신뢰를 지켜라</div>
+  <div class="panel">
+    <p>당신은 반도체 회사 영업팀 신입. 분기마다 시장 뉴스를 읽고, 고객 <span class="term" onclick="gl()">RFQ</span>에 견적을 내고, 협상 테이블에서 카드를 고릅니다. 2년(8분기) 뒤 당신의 직급은?</p>
+    <div class="kpi" style="grid-template-columns:repeat(3,1fr)"><div><span>매출·이익</span><b>💰</b></div><div><span>고객 신뢰도</span><b>🤝</b></div><div><span>승진 트랙</span><b>📈</b></div></div>
+    <p style="margin-top:10px;font-size:13px;color:var(--dim)">고객 4종(하이퍼스케일러·스마트폰 OEM·자동차 Tier-1·팹리스)은 원하는 것이 전혀 다릅니다. 그 차이를 읽는 것이 이 게임의 핵심입니다.</p>
+    <input type="text" id="nick" maxlength="12" placeholder="영업 담당자 닉네임">
+    <button onclick="startGame()">🚀 입사하기</button>
+    <button class="ghost" onclick="gl()">📖 영업 용어집 먼저 보기</button>
+  </div>
+</section>
+
+<section id="s-game" class="screen">
+  <div class="top"><span id="g-q"></span><span id="g-title"></span><span onclick="gl()" style="color:var(--cyan);cursor:pointer">📖 용어</span></div>
+  <div class="kpi"><div><span>누적 매출</span><b id="k-rev">$0M</b></div><div><span>누적 이익</span><b id="k-prof">$0M</b></div><div><span>평균 신뢰도</span><b id="k-trust">50</b></div><div><span>이번 분기 캐파</span><b id="k-cap">100k</b></div></div>
+  <div class="flow" id="flow"></div>
+  <div id="box"></div>
+</section>
+
+<section id="s-result" class="screen">
+  <div class="panel" style="text-align:center">
+    <div class="badge y">2년 실적 평가</div>
+    <div class="nick" id="r-nick" style="margin-top:8px"></div>
+    <div style="margin:10px 0"><span class="grade" id="r-title"></span></div>
+    <div class="kpi" style="grid-template-columns:repeat(3,1fr)"><div><span>총 매출</span><b id="r-rev"></b></div><div><span>총 이익</span><b id="r-prof"></b></div><div><span>평균 신뢰도</span><b id="r-trust"></b></div></div>
+    <p id="r-msg" style="margin-top:10px"></p>
+  </div>
+  <div class="panel"><h3>🧭 당신의 영업 스타일</h3><div id="r-style"></div></div>
+  <div class="panel"><h3>📚 다시 생각해 볼 결정</h3><div id="r-mist"></div></div>
+  <div class="panel"><h3>🏆 영업왕 순위</h3><ol class="rank" id="r-rank"></ol></div>
+  <button onclick="location.reload()">🔁 다시 입사</button>
+</section>
+
+<div id="gl" onclick="if(event.target===this)this.style.display='none'"><div class="box">
+<h3>📖 반도체 B2B 영업 용어집</h3>
+<dl>
+<dt>RFQ (Request for Quotation)</dt><dd>고객이 스펙·물량·납기를 제시하며 견적을 요청하는 문서. 영업의 출발점.</dd>
+<dt>ASP (Average Selling Price)</dt><dd>평균 판매가. 메모리는 시장 ASP가 분기마다 크게 출렁여 견적의 기준이 됩니다.</dd>
+<dt>LTA (Long-Term Agreement)</dt><dd>장기 공급 계약. 물량·가격을 수년간 약속해 수요 변동 리스크를 나눕니다. 자동차·데이터센터 고객이 선호.</dd>
+<dt>Design-in / Design-win</dt><dd>고객 제품 설계에 우리 칩이 채택되는 것. 한 번 채택되면 제품 수명 내내 매출이 이어져 초기 기술지원이 중요합니다.</dd>
+<dt>Allocation</dt><dd>공급 부족 시 한정된 캐파를 고객별로 배분하는 것. 누구에게 얼마를 주느냐가 신뢰와 이익을 좌우합니다.</dd>
+<dt>PPAP / AEC-Q100</dt><dd>자동차 부품 품질 인증 절차·규격. 자동차 고객은 이것 없이는 아예 검토하지 않습니다.</dd>
+<dt>MOQ (Minimum Order Quantity)</dt><dd>최소 주문 수량. 소량 고객에겐 진입 장벽, 공급자에겐 생산 효율의 기준.</dd>
+<dt>NRE (Non-Recurring Engineering)</dt><dd>맞춤 설계에 드는 일회성 개발비. 파운드리·커스텀 칩 영업의 핵심 협상 항목.</dd>
+<dt>Payment Term (지급 조건)</dt><dd>Net 30/60/90 등 대금 지급 기한. 길수록 고객은 좋아하지만 우리 현금흐름과 금융비용이 나빠집니다.</dd>
+<dt>Bit Growth</dt><dd>메모리 출하량(비트 기준) 성장률. 가격이 떨어져도 비트가 늘면 매출이 유지될 수 있습니다.</dd>
+<dt>Incoterms</dt><dd>FOB·CIF 등 운송·보험·관세 책임의 국제 규칙. 수출 견적서에 반드시 명시.</dd>
+</dl><button class="ghost" onclick="document.getElementById('gl').style.display='none'">닫기</button></div></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0);}
+function gl(){$('gl').style.display='flex';}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));const ri=(a,b)=>Math.floor(a+Math.random()*(b-a+1));
+const M=v=>(v<0?'-':'')+'$'+Math.abs(v).toFixed(0)+'M';
+
+/* ===== 데이터 ===== */
+const CUST={
+ hyper:{ic:'☁️',nm:'클라우드X',type:'하이퍼스케일러',want:'가격·대량·안정 공급',tol:.02,vol:[70,90],
+   desc:'연간 수십억 달러를 쓰는 큰손. 경쟁사 가격을 훤히 알고 1%를 두고 싸웁니다. 물량을 못 채우면 바로 이원화(2nd source)합니다.',
+   goal:'목표가: 시장 ASP 대비 -5% 이하'},
+ oem:{ic:'📱',nm:'갤럭틱 모바일',type:'스마트폰 OEM',want:'납기·스펙 적기 대응',tol:.08,vol:[40,60],
+   desc:'신제품 출시일이 생명. 램프업 시점에 물량이 안 오면 라인이 멈춥니다. 가격보다 납기와 스펙 대응을 봅니다.',
+   goal:'목표가: 시장 ASP ±5%, 납기 준수 필수'},
+ auto:{ic:'🚗',nm:'오토파츠 T1',type:'자동차 Tier-1',want:'품질 인증·장기 공급(LTA)',tol:.15,vol:[15,25],
+   desc:'물량은 작지만 한 번 채택되면 7~10년 공급. AEC-Q100·PPAP 없는 견적은 검토조차 안 하고, 단가보다 단종 리스크를 두려워합니다.',
+   goal:'목표가: 프리미엄 허용, 장기 안정 공급 보장'},
+ fabless:{ic:'🧩',nm:'나노칩스',type:'중소 팹리스',want:'기술지원·Design-in',tol:.10,vol:[8,15],
+   desc:'엔지니어 30명짜리 스타트업. 우리 칩을 자기 제품에 설계해 넣으려면 레퍼런스 보드와 FAE 지원이 절실합니다. 성공하면 대형 고객으로 큽니다.',
+   goal:'목표가: 합리적 수준, 기술지원이 결정적'},
+};
+const OFFERS=[
+ {id:'none',nm:'추가 제안 없음',cost:0,desc:'가격·물량만으로 승부'},
+ {id:'tech',nm:'FAE 기술지원 파견',cost:5,desc:'레퍼런스 보드·현장 엔지니어 (비용 $5M)'},
+ {id:'lta',nm:'2년 LTA 제안',cost:0,desc:'물량·가격 2년 보장, 대신 단가 -3%'},
+ {id:'deliv',nm:'납기 우선권 보장',cost:3,desc:'램프업 물량 최우선 배정 (물류비 $3M)'},
+ {id:'quality',nm:'AEC-Q100·PPAP 패키지',cost:4,desc:'차량용 인증·품질 문서 일체 (비용 $4M)'},
+ {id:'cost',nm:'원가 데이터 공개·공동 절감',cost:0,desc:'투명한 원가 구조 제시, 신뢰 ↑'},
+];
+const BEST={hyper:'cost',oem:'deliv',auto:'quality',fabless:'tech'};
+const EVENTS=[
+ {t:'📉 메모리 현물가 급락',d:'서버 고객 재고 조정으로 DRAM 현물가가 분기 대비 18% 하락했습니다.',asp:-.18,cap:0,l:'하락장에선 무리한 고가 견적이 통하지 않습니다. 대신 LTA로 가격을 묶어 두면 방어가 됩니다.'},
+ {t:'📈 AI 서버 수요 폭발',d:'HBM·서버 DRAM 수요가 급증해 ASP가 15% 뛰고 캐파가 부족합니다.',asp:.15,cap:-15,l:'공급 부족(Allocation) 국면. 누구에게 물량을 주느냐가 향후 5년 신뢰를 결정합니다.'},
+ {t:'🔥 경쟁사 팹 정전 사고',d:'경쟁사 팹이 2주 정지. 고객들이 대체 공급을 찾고 있습니다.',asp:.08,cap:0,l:'경쟁사 사고는 기회지만, 이때 폭리를 취하면 시장 정상화 후 고객이 떠납니다.'},
+ {t:'🧯 자사 팹 화재',d:'우리 팹 일부 라인 화재로 이번 분기 캐파가 30% 줄었습니다.',asp:.05,cap:-30,l:'공급 차질 시 고객에게 먼저, 솔직하게 알리는 것이 신뢰를 지키는 유일한 길입니다.'},
+ {t:'🌐 수출 규제 강화',d:'특정 국가향 첨단 반도체 수출 허가제가 시행됐습니다.',asp:-.05,cap:-10,l:'지정학 리스크는 계약서의 불가항력 조항과 Incoterms 검토로 대비합니다.'},
+ {t:'🆕 경쟁사 차세대 제품 출시',d:'경쟁사가 20% 저전력 신제품을 발표하며 우리 고객을 공략 중입니다.',asp:-.06,cap:0,l:'스펙 열세일 땐 가격보다 기술지원·납기·관계로 방어해야 합니다.'},
+ {t:'📦 고객 재고 소진 완료',d:'스마트폰·PC 고객 재고가 정상화되어 신규 주문이 살아납니다.',asp:.06,cap:0,l:'재고 사이클을 읽으면 견적 타이밍이 보입니다. 바닥에서 LTA를 맺는 것이 최고의 영업입니다.'},
+ {t:'💱 환율 급등',d:'원/달러 환율 상승으로 달러 매출의 원화 이익이 늘었습니다.',asp:.03,cap:0,l:'환 이익은 실력이 아닙니다. 견적은 달러 기준 원가로 냉정하게.'},
+ {t:'🚘 전기차 판매 둔화',d:'EV 수요 둔화로 자동차 고객이 발주를 늦추고 있습니다.',asp:-.04,cap:0,l:'자동차 고객은 사이클이 느립니다. 단기 실적보다 인증·관계 유지가 답입니다.'},
+ {t:'🏭 신규 팹 가동',d:'우리 회사 신규 팹이 양산을 시작해 캐파가 20% 늘었습니다.',asp:-.03,cap:20,l:'캐파가 늘면 이를 채울 신규 고객(Design-win)이 필요합니다. 팹리스 육성이 중요해집니다.'},
+];
+const NEGO={
+ hyper:[{say:'"솔직히 말할게요. 경쟁사가 지금 견적보다 <b>12% 싸게</b> 냈습니다. 맞춰주지 않으면 물량 절반은 넘어갑니다."',
+   cards:[{n:'12% 전부 맞춰준다',w:.25,p:-.12,t:2,ex:'수주는 하지만 마진이 증발합니다. 하이퍼스케일러는 다음 분기에 또 같은 요구를 합니다.',bad:true},
+          {n:'절반(6%)만 인하 + 물량 확약 요구',w:.15,p:-.06,t:6,ex:'가격 인하를 물량 확약과 교환하는 것이 정석. 양보엔 반드시 대가를 받습니다.',good:true},
+          {n:'원가 구조를 열어 보이며 한계선 설명',w:.08,p:0,t:8,ex:'투명성은 큰손 고객과의 장기 신뢰를 만듭니다. 단기 승률은 낮아도 관계는 좋아집니다.'},
+          {n:'경쟁사 품질 문제를 지적하며 거절',w:-.15,p:0,t:-8,ex:'경쟁사 비방은 B2B에서 금기. 고객은 당신의 태도를 기억합니다.',bad:true}]},
+  {say:'"내년 물량을 <b>두 배</b>로 늘릴 수 있어요. 대신 3년간 <b>가격 고정</b>을 원합니다. 어떻게 할까요?"',
+   cards:[{n:'3년 고정 수락',w:.25,p:-.03,t:8,ex:'상승장에서 고정가는 독이 됩니다. 물량은 좋지만 ASP가 오르면 기회손실이 큽니다.'},
+          {n:'2년 LTA + 분기별 시장 연동 조항',w:.15,p:0,t:8,ex:'가격 연동(Index-linked) LTA는 양쪽 리스크를 나누는 교과서적 구조입니다.',good:true},
+          {n:'물량은 받고 가격 고정은 거절',w:-.05,p:.02,t:-3,ex:'고객이 원하는 예측 가능성을 주지 못하면 물량 약속도 흔들립니다.'},
+          {n:'선지급(Prepayment) 조건이면 수락',w:.05,p:-.02,t:2,ex:'캐파 투자가 필요할 때 선지급을 받는 것은 실제로 쓰이는 방법입니다. 다만 협상 난이도가 높습니다.'}]}],
+ oem:[{say:'"신제품 출시가 <b>6주 앞당겨졌어요.</b> 램프업 물량을 3주 안에 받아야 합니다. 못 하면 경쟁사로 갑니다."',
+   cards:[{n:'다른 고객 물량을 돌려서라도 맞춘다',w:.3,p:.03,t:10,ex:'납기 대응은 OEM 영업의 전부. 다만 물량을 뺏긴 고객의 신뢰가 깎이는 비용을 감안해야 합니다.',good:true},
+          {n:'급행료(Expedite fee) 10% 제안',w:.15,p:.10,t:0,ex:'가능은 하지만 위기에 가격을 올리면 OEM은 오래 기억합니다.'},
+          {n:'표준 리드타임(8주) 고수',w:-.3,p:0,t:-10,ex:'원칙만 고집하면 딜을 잃습니다. 공급망은 유연성이 경쟁력입니다.',bad:true},
+          {n:'일부만 먼저, 나머지는 주차별 분납 제안',w:.15,p:0,t:5,ex:'현실적인 대안 제시. 고객 램프업 커브에 맞춘 분납은 자주 쓰이는 해법입니다.'}]},
+  {say:'"경쟁사 신제품이 전력 효율이 <b>15% 좋다</b>던데요. 같은 가격이면 우리가 그쪽을 쓸 이유가 있나요?"',
+   cards:[{n:'가격 10% 인하로 대응',w:.15,p:-.10,t:0,ex:'스펙 열세를 가격으로 메우면 마진도 포지셔닝도 무너집니다.'},
+          {n:'시스템 레벨 최적화 FAE 지원 제안',w:.15,p:0,t:8,ex:'칩 단독 스펙이 아니라 고객 시스템 전체 성능으로 승부하는 기술 영업의 정석.',good:true},
+          {n:'차세대 로드맵 공유 + 샘플 우선 제공',w:.1,p:0,t:6,ex:'로드맵 공유는 "우리와 함께 가자"는 메시지. Design-in 유지에 효과적입니다.'},
+          {n:'경쟁사 데이터가 과장이라고 반박',w:-.1,p:0,t:-5,ex:'근거 없는 반박은 신뢰를 깎습니다. 검증된 데이터로만 말하세요.',bad:true}]}],
+ auto:[{say:'"저희는 이 부품을 <b>2035년까지</b> 써야 합니다. 그 사이 단종(EOL)되면 어떻게 하실 건가요?"',
+   cards:[{n:'10년 공급 보증 + EOL 시 최종 구매(LTB) 조항 제안',w:.3,p:.03,t:12,ex:'자동차 고객의 최대 두려움은 단종. 장기 공급 보증과 Last-Time-Buy 조항이 정답입니다.',good:true},
+          {n:'그때 가서 후속 제품으로 교체 제안',w:-.2,p:0,t:-8,ex:'자동차는 재인증에 1~2년이 듭니다. "교체하면 된다"는 말은 이해 부족으로 들립니다.',bad:true},
+          {n:'가격 5% 인하로 무마',w:-.1,p:-.05,t:-3,ex:'자동차 고객은 가격으로 리스크를 사지 않습니다. 질문에 답하지 않은 셈입니다.'},
+          {n:'경쟁사도 보장 못 한다고 설명',w:-.05,p:0,t:-2,ex:'사실이더라도 고객 문제를 해결하지 않았습니다.'}]},
+  {say:'"PPAP 서류 검토 중인데, <b>공정 변경 사전 통보(PCN)</b> 절차가 명확하지 않네요. 이 상태로는 승인이 어렵습니다."',
+   cards:[{n:'PCN 절차 문서화 + 변경 시 90일 사전 통보 약속',w:.3,p:0,t:10,ex:'자동차 품질 시스템의 핵심. 공정 변경을 마음대로 하지 않겠다는 약속이 신뢰의 근간입니다.',good:true},
+          {n:'우리 팹은 변경이 거의 없다고 안심시킴',w:-.15,p:0,t:-6,ex:'구두 안심은 품질 팀에 통하지 않습니다. 절차와 문서만 인정됩니다.',bad:true},
+          {n:'샘플 무상 추가 제공',w:0,p:-.02,t:2,ex:'호의는 좋지만 지적된 절차 문제를 해결하지 못했습니다.'},
+          {n:'인증 비용을 고객이 분담하면 진행',w:-.1,p:.02,t:-5,ex:'공급자 품질 시스템 구축 비용을 고객에게 넘기는 건 관행상 어렵습니다.'}]}],
+ fabless:[{say:'"저희 엔지니어가 레퍼런스 디자인에서 막혔어요. <b>FAE 상주</b> 없이는 3개월 안에 테이프아웃이 불가능합니다. 대신 지금은 물량이 작아요."',
+   cards:[{n:'FAE 2명 3개월 파견 (비용 부담)',w:.3,p:0,t:15,ex:'Design-in 단계의 기술지원은 투자입니다. 성공하면 제품 수명 내내 독점 공급(Design-win).',good:true},
+          {n:'유료 기술지원 계약(NRE) 제안',w:.1,p:.05,t:3,ex:'현실적인 방법. 다만 자금이 부족한 스타트업엔 진입 장벽이 됩니다.'},
+          {n:'MOQ 미달이라 거절',w:-.3,p:0,t:-15,ex:'오늘의 팹리스가 내일의 대형 고객입니다. 근시안적 거절은 미래 매출을 버리는 것.',bad:true},
+          {n:'온라인 문서·포럼 안내로 대체',w:-.1,p:0,t:-5,ex:'막힌 엔지니어에게 문서 링크는 도움이 되지 않습니다.'}]},
+  {say:'"투자 유치가 늦어져서 <b>대금 지급을 90일</b> 뒤로 미뤄야 할 것 같아요. 이해해 주실 수 있나요?"',
+   cards:[{n:'신용 검토 후 60일까지만 연장',w:.15,p:-.01,t:6,ex:'유연성과 리스크 관리의 균형. 여신 한도 안에서 조건부로 돕는 것이 정석입니다.',good:true},
+          {n:'90일 수락',w:.25,p:-.02,t:10,ex:'고객은 고맙지만 스타트업 부도 시 미수금 전액 손실 리스크를 떠안습니다.'},
+          {n:'선불 아니면 출하 불가',w:-.2,p:0,t:-10,ex:'현금흐름이 막힌 고객을 밀어내면 관계가 끝납니다.',bad:true},
+          {n:'물량 절반씩 나눠 출하·결제',w:.1,p:0,t:4,ex:'익스포저를 줄이면서 고객을 돕는 실용적 대안.'}]}],
+};
+const TITLES=[[0,'사원'],[150,'대리'],[350,'과장'],[600,'팀장'],[900,'상무']];
+
+/* ===== 상태 ===== */
+let S={};
+function startGame(){
+  S={nick:$('nick').value.trim()||'익명 영업',q:0,asp:3000,cost:2100,cap:100,rev:0,prof:0,trust:{hyper:50,oem:50,auto:50,fabless:50},
+     order:['hyper','oem','auto','fabless','hyper','oem','auto','fabless'].sort(()=>Math.random()-.5),
+     events:EVENTS.slice().sort(()=>Math.random()-.5).slice(0,8),log:[],mist:[],stats:{prem:[],offers:[],lta:0,ltaAuto:false,wins:0},nego:{}};
+  show('s-game');quarterStart();
+}
+function kpi(){$('k-rev').textContent=M(S.rev);$('k-prof').textContent=M(S.prof);$('k-trust').textContent=avgTrust();$('k-cap').textContent=S.cap+'k';$('g-q').textContent=`Q${S.q+1} / 8`;$('g-title').textContent='직급: '+title();}
+function avgTrust(){return Math.round(Object.values(S.trust).reduce((a,b)=>a+b)/4);}
+function score(){return S.prof+avgTrust()*3;}
+function title(){let t='사원';TITLES.forEach(x=>{if(score()>=x[0])t=x[1];});return t;}
+function flow(i){$('flow').innerHTML=['시장 뉴스','RFQ 견적','협상','결과','결산'].map((x,j)=>`<span class="${j===i?'on':''}">${x}</span>`).join('');}
+
+/* ===== 1. 시장 뉴스 ===== */
+function quarterStart(){
+  flow(0);kpi();S.cap=100;
+  const ev=S.events[S.q];S.asp=Math.round(S.asp*(1+ev.asp));S.cap=Math.round(S.cap*(1+ev.cap/100));S.cost=Math.round(S.asp*0.7*0.6+2100*0.4);
+  kpi();
+  $('box').innerHTML=`<div class="panel"><span class="badge m">Q${S.q+1} 시장 뉴스</span>
+    <div class="news"><div class="h">SEMI TIMES</div><div class="t">${ev.t}</div><div class="d">${ev.d}</div></div>
+    <div class="kpi" style="grid-template-columns:1fr 1fr;margin-top:10px"><div><span>이번 분기 시장 ASP</span><b>$${S.asp.toLocaleString()}/wafer <small style="color:${ev.asp>=0?'var(--grn)':'var(--red)'}">(${ev.asp>=0?'+':''}${Math.round(ev.asp*100)}%)</small></b></div><div><span>우리 원가</span><b>$${S.cost.toLocaleString()}</b></div></div>
+    <div class="tip">💡 <b>영업 인사이트</b> — ${ev.l}</div>
+    <button onclick="rfq()">📨 RFQ 확인하기</button></div>`;
+}
+
+/* ===== 2. RFQ 견적 ===== */
+let R={};
+function rfq(){
+  flow(1);const cid=S.order[S.q],c=CUST[cid];R={cid,c,vol:ri(...c.vol),prem:0,alloc:0,offer:'none',term:30};R.alloc=Math.min(R.vol,S.cap);
+  $('box').innerHTML=`<div class="panel"><span class="badge">RFQ 도착</span>
+    <div class="cust"><div class="ic">${c.ic}</div><div><div class="nm">${c.nm} <small style="color:var(--dim)">· ${c.type}</small></div><div class="wt">중요시하는 것: <b style="color:var(--yel)">${c.want}</b><br>신뢰도 ${S.trust[cid]}</div><div class="trust"><i style="width:${S.trust[cid]}%"></i></div></div></div>
+    <p style="font-size:13px;color:var(--dim);margin-top:8px">${c.desc}</p>
+    <div class="tip">📋 <b>요청 물량 ${R.vol}k wafer</b> · ${c.goal} · 시장 ASP $${S.asp.toLocaleString()} · 우리 캐파 ${S.cap}k</div>
+    <div class="field"><div class="lb"><span>견적 단가 (시장 ASP 대비)</span><b id="f-prem">0%</b></div><input type="range" min="-15" max="20" value="0" oninput="R.prem=+this.value/100;upd()"><div class="hint" id="f-premh"></div></div>
+    <div class="field"><div class="lb"><span>배정 물량 (Allocation)</span><b id="f-vol"></b></div><input type="range" min="0" max="${Math.min(R.vol,S.cap)}" value="${R.alloc}" oninput="R.alloc=+this.value;upd()"><div class="hint" id="f-volh"></div></div>
+    <div class="field"><div class="lb"><span>추가 제안 (Value Offer)</span></div><div class="opts" id="f-offers"></div></div>
+    <div class="field"><div class="lb"><span>지급 조건 (Payment Term)</span></div><div class="opts" id="f-terms" style="grid-template-columns:repeat(3,1fr)"></div><div class="hint">길수록 고객은 좋아하지만 금융비용이 듭니다.</div></div>
+    <div class="field"><div class="lb"><span>예상 수주 확률</span><b id="f-p"></b></div><div class="gauge"><i id="f-g"></i><b id="f-gt"></b></div><div class="lb" style="margin-top:6px"><span>수주 시 예상 이익</span><b id="f-pr"></b></div></div>
+    <button onclick="nego()">🤝 협상 테이블로</button></div>`;
+  $('f-offers').innerHTML=OFFERS.map(o=>`<div class="opt ${o.id==='none'?'sel':''}" onclick="R.offer='${o.id}';sel(this);upd()">${o.nm}<small>${o.desc}</small></div>`).join('');
+  $('f-terms').innerHTML=[30,60,90].map(t=>`<div class="opt ${t===30?'sel':''}" onclick="R.term=${t};sel(this);upd()">Net ${t}</div>`).join('');
+  upd();
+}
+function sel(el){el.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
+function price(){let p=S.asp*(1+R.prem);if(R.offer==='lta')p*=.97;return p;}
+function winP(){
+  const c=R.c,cid=R.cid;let p=.65+(c.tol-R.prem)*2.2;
+  if(R.offer===BEST[cid])p+=.22;else if(R.offer!=='none')p+=.06;if(R.offer==='lta')p+=.08;
+  p+=R.term===90?.08:R.term===60?.03:0;p+=(S.trust[cid]-50)/200;
+  const fill=R.alloc/R.vol;if(fill<.6)p-=cid==='hyper'?.3:.18;else if(fill<.9)p-=.06;
+  if(cid==='auto'&&R.offer!=='quality')p-=.25;
+  return clamp(p,.03,.97);
+}
+function expProfit(){const o=OFFERS.find(x=>x.id===R.offer);const fin=R.term===90?.015:R.term===60?.007:0;return R.alloc*(price()-S.cost)/1000-o.cost-R.alloc*price()/1000*fin;}
+function upd(){
+  $('f-prem').textContent=(R.prem>=0?'+':'')+Math.round(R.prem*100)+'% → $'+Math.round(price()).toLocaleString();
+  const m=(price()-S.cost)/price()*100;$('f-premh').textContent=`마진 ${m.toFixed(1)}% · ${R.prem>R.c.tol?'이 고객의 허용 프리미엄('+Math.round(R.c.tol*100)+'%)을 넘었습니다':R.prem<-.08?'시장가보다 크게 낮습니다. 마진을 확인하세요':'허용 범위 안입니다'}`;
+  $('f-vol').textContent=R.alloc+'k / 요청 '+R.vol+'k';
+  const fill=R.alloc/R.vol;$('f-volh').textContent=fill<.6?'요청의 60% 미만 — 고객이 이원화를 검토합니다':fill<.9?'일부 미달 — 소폭 감점':'요청 물량 충족';
+  const p=winP();$('f-p').textContent=Math.round(p*100)+'%';$('f-g').style.width=(p*100)+'%';$('f-gt').textContent=p>.7?'유력':p>.45?'접전':'불리';
+  $('f-pr').textContent=M(expProfit());
+}
+
+/* ===== 3. 협상 ===== */
+function nego(){
+  flow(2);const cid=R.cid;const used=S.nego[cid]||0;const sc=NEGO[cid][used%2];S.nego[cid]=used+1;R.sc=sc;
+  $('box').innerHTML=`<div class="panel"><span class="badge y">협상 테이블</span>
+    <div class="cust"><div class="ic">${R.c.ic}</div><div><div class="nm">${R.c.nm} 구매팀장</div><div class="wt">견적 $${Math.round(price()).toLocaleString()} · ${R.alloc}k · ${OFFERS.find(o=>o.id===R.offer).nm} · Net ${R.term}</div></div></div>
+    <div class="talk">${sc.say}</div>
+    <p style="font-size:12px;color:var(--dim);margin-top:8px">대응 카드를 고르세요. 승률·가격·신뢰도가 함께 움직입니다.</p>
+    <div id="cards"></div></div>`;
+  $('cards').innerHTML=sc.cards.map((k,i)=>`<button class="card" onclick="pick(${i})">🃏 ${k.n}</button>`).join('');
+}
+function pick(i){
+  const k=R.sc.cards[i];R.card=k;
+  document.querySelectorAll('#cards .card').forEach((b,j)=>{b.classList.add('dis');if(j===i)b.classList.add(k.bad?'bad':'ok');});
+  const t=document.createElement('div');t.className='tip';t.innerHTML=`${k.bad?'⚠️':k.good?'✅':'💬'} ${k.ex}<br><span style="color:var(--dim)">승률 ${k.w>=0?'+':''}${Math.round(k.w*100)}%p · 가격 ${k.p>=0?'+':''}${Math.round(k.p*100)}% · 신뢰 ${k.t>=0?'+':''}${k.t}</span>`;
+  $('cards').appendChild(t);const b=document.createElement('button');b.textContent='📊 결과 확인';b.onclick=result;$('cards').appendChild(b);
+  if(k.bad)S.mist.push({q:S.q+1,c:R.c.nm,d:'협상 카드: '+k.n,ex:k.ex});
+}
+
+/* ===== 4. 결과 ===== */
+function result(){
+  flow(3);const k=R.card,cid=R.cid;R.prem+=k.p;const p=clamp(winP()+k.w,.03,.97);const won=Math.random()<p;
+  const o=OFFERS.find(x=>x.id===R.offer);let rev=0,prof=0,dt=k.t;
+  if(won){rev=R.alloc*price()/1000;prof=expProfit();S.stats.wins++;dt+=6;if(R.offer===BEST[cid])dt+=6;if(R.offer==='lta'){S.stats.lta++;if(cid==='auto')S.stats.ltaAuto=true;dt+=4;}if(R.alloc/R.vol<.6)dt-=8;}
+  else{prof=-o.cost*0.5;dt-=8;}
+  S.rev+=rev;S.prof+=prof;S.trust[cid]=clamp(S.trust[cid]+dt,0,100);S.stats.prem.push(R.prem);S.stats.offers.push(R.offer);
+  // 실수 기록
+  if(!won&&R.prem>R.c.tol+.03)S.mist.push({q:S.q+1,c:R.c.nm,d:`프리미엄 +${Math.round(R.prem*100)}% 견적`,ex:`${R.c.type}의 허용 프리미엄은 약 ${Math.round(R.c.tol*100)}%입니다. 고객 유형별 가격 민감도를 먼저 읽으세요.`});
+  if(cid==='auto'&&R.offer!=='quality')S.mist.push({q:S.q+1,c:R.c.nm,d:'AEC-Q100/PPAP 없이 견적',ex:'자동차 고객은 품질 인증 패키지 없는 견적을 검토조차 하지 않습니다.'});
+  if(won&&(price()-S.cost)/price()<.05)S.mist.push({q:S.q+1,c:R.c.nm,d:`마진 ${((price()-S.cost)/price()*100).toFixed(1)}%로 수주`,ex:'수주했지만 남는 게 없습니다. 이익 없는 매출은 팹 감가상각도 못 갚습니다.'});
+  if(R.alloc/R.vol<.6&&cid==='hyper')S.mist.push({q:S.q+1,c:R.c.nm,d:`요청의 ${Math.round(R.alloc/R.vol*100)}%만 배정`,ex:'하이퍼스케일러는 물량 미충족 시 즉시 2nd source를 키웁니다. 한번 나뉜 점유율은 회복이 어렵습니다.'});
+  S.log.push({q:S.q+1,cid,won,rev,prof,dt});kpi();
+  $('box').innerHTML=`<div class="panel" style="text-align:center"><span class="badge ${won?'':'m'}">${R.c.nm}</span>
+    <div class="big ${won?'w':'l'}" style="margin-top:8px">${won?'🎉 수주 성공':'😞 수주 실패'}</div>
+    <p style="color:var(--dim);font-size:12px">수주 확률 ${Math.round(p*100)}% · 주사위 ${won?'성공':'실패'}</p>
+    <div class="kpi" style="grid-template-columns:repeat(3,1fr);margin-top:10px"><div><span>매출</span><b>${M(rev)}</b></div><div><span>이익</span><b style="color:${prof>=0?'var(--grn)':'var(--red)'}">${M(prof)}</b></div><div><span>신뢰도</span><b style="color:${dt>=0?'var(--grn)':'var(--red)'}">${dt>=0?'+':''}${dt}</b></div></div>
+    <div class="tip" style="text-align:left">${won?`<b>왜 이겼나:</b> ${R.offer===BEST[cid]?'고객이 원하는 것('+R.c.want+')을 정확히 제안했습니다. ':''}${R.prem<=R.c.tol?'가격이 허용 범위였고 ':''}${k.w>0?'협상 카드가 승률을 올렸습니다.':''}`:`<b>왜 졌나:</b> ${R.prem>R.c.tol?'가격이 이 고객의 허용선을 넘었습니다. ':''}${cid==='auto'&&R.offer!=='quality'?'품질 인증 패키지가 없었습니다. ':''}${R.alloc/R.vol<.6?'물량이 요청에 크게 못 미쳤습니다. ':''}${k.w<0?'협상 카드가 역효과를 냈습니다. ':''}${R.prem<=R.c.tol&&k.w>=0&&!(cid==='auto'&&R.offer!=='quality')?'조건은 괜찮았지만 확률 싸움에서 졌습니다. B2B는 여러 딜을 동시에 굴려야 합니다.':''}`}</div>
+    <button onclick="summary()">📒 분기 결산</button></div>`;
+}
+
+/* ===== 5. 결산 ===== */
+function summary(){
+  flow(4);const l=S.log[S.q];const at=avgTrust();
+  const boss=l.won?(l.prof>60?'이번 분기 이익이 훌륭해. 이런 딜을 계속 가져와.':l.prof>0?'수주는 좋은데 마진이 아쉽군. 다음엔 가치 제안으로 가격을 지켜봐.':'수주했지만 남는 게 없잖아. 매출이 아니라 이익을 보고 뛰어.'):(at>60?'놓쳤지만 고객 관계는 살아 있어. 다음 RFQ에서 만회해.':'딜도 놓치고 신뢰도 떨어졌어. 고객이 뭘 원하는지부터 다시 들어봐.');
+  $('box').innerHTML=`<div class="panel"><span class="badge y">Q${S.q+1} 결산</span>
+    <div class="kpi" style="grid-template-columns:repeat(3,1fr);margin-top:8px"><div><span>누적 매출</span><b class="cnt" data-v="${S.rev}">$0M</b></div><div><span>누적 이익</span><b class="cnt" data-v="${S.prof}">$0M</b></div><div><span>평균 신뢰도</span><b class="cnt" data-v="${at}" data-raw="1">0</b></div></div>
+    <div style="margin-top:10px;font-size:13px">${Object.entries(S.trust).map(([k,v])=>`<div style="display:flex;align-items:center;gap:6px;margin:4px 0"><span style="width:110px">${CUST[k].ic} ${CUST[k].nm}</span><div class="trust" style="flex:1;margin:0"><i style="width:${v}%"></i></div><b style="width:28px;text-align:right">${v}</b></div>`).join('')}</div>
+    <div class="boss"><div class="f">👔</div><div class="b"><b style="color:var(--yel)">영업본부장:</b> "${boss}"<br><span style="color:var(--dim);font-size:12px">현재 직급: <b>${title()}</b> (점수 ${Math.round(score())})</span></div></div>
+    <button onclick="${S.q<7?'S.q++;quarterStart()':'finish()'}">${S.q<7?'다음 분기 →':'📊 2년 실적 평가'}</button></div>`;
+  document.querySelectorAll('.cnt').forEach(el=>{const v=+el.dataset.v,raw=el.dataset.raw;let t0=performance.now();(function f(n){const k=Math.min((n-t0)/900,1);const val=v*(1-Math.pow(1-k,3));el.textContent=raw?Math.round(val):M(val);if(k<1)requestAnimationFrame(f);})(t0);});
+}
+
+/* ===== 최종 ===== */
+function finish(){
+  const at=avgTrust(),t=title();
+  $('r-nick').textContent=S.nick;$('r-title').textContent=t+(S.stats.ltaAuto&&S.trust.auto>=80?' 🏅':'');
+  $('r-rev').textContent=M(S.rev);$('r-prof').textContent=M(S.prof);$('r-trust').textContent=at;
+  $('r-msg').innerHTML={사원:'2년 동안 성장이 더뎠습니다. 고객 유형별 니즈부터 다시 공부해 보세요.',대리:'기본기는 갖췄습니다. 가치 제안과 협상 카드의 조합을 연습하세요.',과장:'안정적인 영업 담당자. 이익률과 장기 관계를 동시에 챙기기 시작했습니다.',팀장:'매출·이익·신뢰를 균형 있게 키운 실력파. 팀을 맡을 자격이 있습니다.',상무:'전설의 세일즈! 시장 사이클을 읽고 고객을 키우는 진짜 B2B 영업입니다.'}[t]+(S.stats.ltaAuto&&S.trust.auto>=80?'<br><b style="color:var(--yel)">🏅 히든 엔딩: 자동차 고객과 장기 파트너십 달성 — 10년 매출을 확보했습니다!</b>':'');
+  const avgP=S.stats.prem.reduce((a,b)=>a+b,0)/S.stats.prem.length;const tech=S.stats.offers.filter(o=>o==='tech'||o==='cost').length;
+  let st,sd;if(avgP<-.04){st='💸 가격 파이터';sd='가격으로 시장을 뚫는 유형. 수주율은 높지만 마진이 얇고, 고객이 "싼 회사"로 기억할 위험이 있습니다.';}
+  else if(S.stats.lta>=2||at>=70){st='🤝 관계형 세일즈';sd='LTA와 신뢰로 장기 매출을 쌓는 유형. 사이클 하락기에 강하고, 자동차·데이터센터 고객에 최적입니다.';}
+  else if(tech>=3){st='🔬 기술형 세일즈';sd='기술지원과 원가 투명성으로 승부하는 유형. Design-win을 잘 만들고 팹리스 육성에 강합니다.';}
+  else{st='⚖️ 균형형 세일즈';sd='가격·관계·기술을 상황에 맞게 섞는 유형. 어떤 고객이든 무난하지만 강점을 하나 더 키우면 좋습니다.';}
+  $('r-style').innerHTML=`<div class="num">${st}</div><p style="margin-top:6px;color:var(--dim);font-size:13px">${sd}</p><p style="font-size:12px;margin-top:6px">평균 견적 프리미엄 ${(avgP*100).toFixed(1)}% · 수주 ${S.stats.wins}/8 · LTA ${S.stats.lta}건</p>`;
+  const uniq=[];S.mist.forEach(m=>{if(!uniq.find(u=>u.d===m.d))uniq.push(m);});
+  $('r-mist').innerHTML=uniq.length?uniq.slice(0,4).map(m=>`<div class="tip"><b>Q${m.q} ${m.c}</b> — ${m.d}<br><span style="color:var(--dim)">${m.ex}</span></div>`).join(''):'<p style="color:var(--grn)">치명적인 실수가 없었습니다. 👏</p>';
+  let rank=[];try{rank=JSON.parse(localStorage.getItem('semideal_rank')||'[]');}catch(e){}
+  const me={n:S.nick,s:Math.round(score()),t,ts:Date.now()};rank.push(me);rank.sort((a,b)=>b.s-a.s||a.ts-b.ts);rank=rank.slice(0,10);
+  try{localStorage.setItem('semideal_rank',JSON.stringify(rank));}catch(e){}
+  $('r-rank').innerHTML=rank.map((r,i)=>`<li class="${r.ts===me.ts?'me':''}"><span>${['🥇','🥈','🥉'][i]||(i+1)+'.'} ${r.n}</span><span>${r.t} · ${r.s}점</span></li>`).join('');
+  show('s-result');
+}
+</script>
+</body>
+</html>
